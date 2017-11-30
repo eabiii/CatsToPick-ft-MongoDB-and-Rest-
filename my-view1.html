@@ -1,0 +1,139 @@
+
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+
+
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+        paper-input
+        {
+            max-width: 200px;
+        }
+    </style>
+
+    <div class="card">
+      <div class="circle">1</div>
+      <h1>Add Book</h1>
+	  <div id="ab">
+	  <paper-input id="title" label="Book Title" value="{{title}}" ></paper-input>
+	 
+            <paper-dropdown-menu label="Category">
+              <paper-listbox attr-for-selected="value" slot="dropdown-content" id="category" selected="{{category}}">
+                <paper-item value="Fiction">Fiction</paper-item>
+                <paper-item value="Non-Fiction">Non-Fiction</paper-item>
+                <paper-item value="Thriller">Thriller</paper-item>
+                <paper-item value="Drama">Drama</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+	  <p>Book Description:</p>
+	  <br>
+           <paper-input label="desc" value="{{desc}}" id="desc"></paper-input>
+          <paper-input id="price" label="Price" inputValue="{{abtt}}"></paper-input>
+	  <paper-button toggles raised class="custom green" on-click="addBook">Add Book</paper-button>
+	  </div>
+    </div>
+	<div class="card">
+		<div class="circle">1.5</div>
+		<h1>Delete Book</h1>
+		<p>Please select/type the book's name:</p>
+		<input class="form-control col-md-7 col-xs-12" required="required" type = "text" name="book" list="booklist" placeholder="Book Name">
+		<datalist id="booklist">
+			<option value="Some stuff from DB">
+		</datalist><br><br>
+		<paper-button toggles raised class="custom green" onClick="deleteBook()">Delete Book</paper-button>
+        <h1>{{title}}</h1>
+        <h1>{{category}}</h1>
+      </div>
+        
+  </template>
+
+      <iron-ajax
+            id = "insertBook"
+            url = "http://127.0.0.1:8080/books/book"
+            body = '[{"title":"[[title]]" , "category": "[[category]]", "description": "[[desc]]", "price":"[[price]]"}]'
+            method = "POST"
+            handle-as = "json"
+            content-type = "application/json"
+            on-response="addNewBook"
+            debounce-duration="300">
+      </iron-ajax>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+     ready() {
+		super.ready();
+	  }
+        
+        
+       static get properties(){
+            return {
+                books:{
+                type: Array,
+                    value(){
+                        return [{
+                            
+                            title:{
+                                type: String
+                            },
+                            category:{
+                                type: String
+                            },
+                            desc:{
+                                type: String
+                            },
+                            price:{
+                                type: String
+                            }
+                        }];
+                    }
+                },
+            };
+        }
+        
+    
+        
+     addBook() {
+		this.$.insertBook.generateRequest();
+	  }
+        
+      addNewBook(){
+            this.push("books", {title: this.$.title.value, category: this.category, description: this.$.desc.value, price: this.$.price.value});
+            this.$.title.value = "";
+            this.title = "";
+            this.category = "";
+            this.$.category.value = "";
+            this.$.description.value = "";
+            this.$.price.value = "";
+            alert("New book added!");
+        }   
+        
+        
+        
+    }
+	
+	function addBDB(title){
+        
+        var value=title;
+        window.alert(value);
+            <!-- Commands to add books to the DB -->
+	}
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>
