@@ -5,6 +5,10 @@
    Restheart
    XAMPP
 # Download or clone the project
+# Download the bower component file and replace the exisitng file in the folder
+https://drive.google.com/file/d/1bMuD7N6MmVijXtiZH_t1nlzei-LiIcZV/view?usp=sharing
+<br>
+<br>
  Start mongodb on the project folder <br>
   Open terminal/cmd on the project <br>
   enter “start mongod -—dbpath /db” (Windows User), “mongod -—dbpath /db”(Mac User) <br>
@@ -24,3 +28,5 @@
   
   Run Apache server and type the following in the browser:
   http://localhost/CatsToPick/index.php
+  
+  
